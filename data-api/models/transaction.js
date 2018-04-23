@@ -1,9 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const { dataBuilder, optionBuilder, ipCruncher, scoreAnalyzer } = require('../helper/helper-functions');
-// const { requestPromise } = require('../controllers/transaction-controller');
-const request = require('request');
+const { 
+    dataBuilder, 
+    optionBuilder, 
+    ipCruncher, 
+    scoreAnalyzer, 
+    requestPromise 
+} = require('../helper/helper-functions');
+
 
 var transactionSchema = new Schema({
     timeStamp: String,
@@ -12,18 +17,6 @@ var transactionSchema = new Schema({
     userAgent: String,
     location: String,
     ipAddress: String
-});
-
-
-// Request Library Promise Wrapper
-const requestPromise = options => new Promise((resolve, reject) => {
-    request(options, (err, res, body) => {
-        if (err != null) {
-            return reject(err);
-        } else {
-            resolve(body);
-        }
-    })
 });
 
 
@@ -40,7 +33,6 @@ transactionSchema.statics.findWithFraud = async function () {
         const options = optionBuilder(process.env.URI, process.env.KEY, data);
 
         // do api stuff here for fraud check
-
         let output = await requestPromise(options);
 
         // convert to a an array of objects
@@ -52,7 +44,7 @@ transactionSchema.statics.findWithFraud = async function () {
 
         return allTransactions.map((t, index) => ({ ...t._doc, fraud: output[index] }));
     } catch (err) {
-        console.log("ERR", err.message);
+        return err;
     }
 }
 
