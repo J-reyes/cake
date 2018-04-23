@@ -1,0 +1,45 @@
+#login {
+    margin-top: 20%;
+    width: 400px;
+}
+#register {
+    margin-top: 20%;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    /* padding-top: 20px; */
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    font-size: 14px;
+  }
+  
+  #subtitle-container {
+    margin: 20px 0 20px 0;
+  }
+  
+  #button-add {
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+  
+  .note-link {
+    margin: 5px;
+  }
+  
+  .note-top {
+    margin: 10px 0;
+  }
+  
+  #cancel-link {
+    padding-right: 10px;
+  }
+  
+  p {
+    white-space: pre-wrap;
+  }
