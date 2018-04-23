@@ -28,7 +28,6 @@ const dataBuilder = inputs => ({
 });
 
 
-
 const getFraudSpecs = options => {
     request(options, (err, res, body) => {
         if (!err && res.statusCode == 200) {
@@ -40,6 +39,24 @@ const getFraudSpecs = options => {
     });
 }
 
+const ipCruncher = ipString => {
+    const ipStr = ipString.split(".").join("");
+    const number = parseInt(ipStr.substr(0, 4));
+    return number;
+}
+
+// sums up all the attributes in the output object and returns arbitrary bool
+const scoreAnalyzer = output => {
+    const checkList = ["TSpike", "ZSpike", "rpscore", "rpalert", "tscore", "talert"];
+    let sum = 0;
+
+    for (let each of checkList) {
+        sum += parseFloat(output[each]);
+    }
+
+    return sum;
+}
 
 
-module.exports = { optionBuilder, dataBuilder, getFraudSpecs }
+
+module.exports = { optionBuilder, dataBuilder, getFraudSpecs, ipCruncher, scoreAnalyzer }

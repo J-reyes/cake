@@ -14,6 +14,18 @@ const testData = [
     }
 ]
 
+// Request Library Promise Wrapper
+const requestPromise = options => new Promise((resolve, reject) => {
+    request(options, (err, res, body) => {
+        if (err != null) {
+            return reject(err);
+        } else {
+            resolve(body);
+        }
+    })
+});
+
+
 // GET
 const index = async (req, res) => {
     try {
@@ -24,18 +36,23 @@ const index = async (req, res) => {
     }
 }
 
-const test = (req, response) => {
-    const data = dataBuilder(testData);
-    const options = optionBuilder(process.env.URI, process.env.KEY, data);
+const test = async (req, res) => {
+    // const data = dataBuilder(testData);
+    // const options = optionBuilder(process.env.URI, process.env.KEY, data);
 
-    request(options, (err, res, body) => {
-        if (!err && res.statusCode == 200) {
-            response.json(JSON.parse(body));
-        } else {
-            console.log("The request failed with status code: " + res.statusCode);
-            response.json({ error: err });
-        }
-    });
+    // try {
+    //     let body = await requestPromise(options);
+    //     body = JSON.parse(body);
+    //     res.json(body["Results"]);
+    // } catch (err) {
+    //     res.status(500).json({ error: err.message });
+    // }
+    try {
+        const transactionsWithFraudDetails = await Transaction.findWithFraud();
+        res.json(transactionsWithFraudDetails);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 }
 
 // GET by ID
@@ -68,4 +85,4 @@ const create = async (req, res) => {
 }
 
 
-module.exports = { index, getById, create, update, test };
+module.exports = { index, getById, create, update, test, requestPromise };
