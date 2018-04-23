@@ -14,6 +14,17 @@ class LogIn extends React.Component {
         }
     }
 
+    passwordLength() {
+        let password = this.state.password;
+
+        let length = password.length;
+
+        if( length < 8) {
+            return (
+                "Minimum of 8 characters"
+            )
+        }
+    }
 
     logIn() {
         // debugging
@@ -43,6 +54,7 @@ class LogIn extends React.Component {
                         <div className="form-group" >
                             <label htmlFor="password-input">Password</label>
                             <input onChange={(e) => { this.setState({ password: e.target.value }) }} value={this.state.password} type="password" className="form-control" id="password-input" placeholder="Password" />
+                            <div class="help-block"> {this.passwordLength(this)} </div>
                         </div>
                         {/* Password Inout Field End */}
 

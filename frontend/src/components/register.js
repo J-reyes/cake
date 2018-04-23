@@ -32,9 +32,9 @@ class Register extends React.Component {
 
         let length = password.length;
 
-        if( length < 6) {
+        if( length < 8) {
             return (
-                "Minimum of 6 characters"
+                "Minimum of 8 characters"
             )
         }
     }
