@@ -9,10 +9,11 @@ class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: {
-                first: '',
-                last: '',
-            },
+
+            first: '',
+            last: '',
+
+            username: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -20,7 +21,7 @@ class Register extends React.Component {
     }
 
     passwordMatch() {
-        if(this.state.password != this.state.confirmPassword) {
+        if (this.state.password != this.state.confirmPassword) {
             return (
                 "Passwords Do Not Match"
             )
@@ -32,7 +33,7 @@ class Register extends React.Component {
 
         let length = password.length;
 
-        if( length < 6) {
+        if (length < 6) {
             return (
                 "Minimum of 6 characters"
             )
@@ -42,23 +43,25 @@ class Register extends React.Component {
 
     registerUser() {
 
-        const user = {
-            firstName: this.state.first,
-            lastName: this.state.last,
+        var body = {
+            name: this.state.first + " " + this.state.last,
+            username: this.state.username,
             email: this.state.email,
             password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
         }
 
-
-
         // register user with User API
-
-        axios.post('http://localhost:5000/api/users', user)
-            .then(
-               
-        )
-
+        axios.post('http://localhost:3000/users/', body)
+            .then(response => {
+                this.setState({
+                    first: '',
+                    last: '',
+                    username: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                })
+            })
         // Debugging
     }
 
@@ -66,7 +69,7 @@ class Register extends React.Component {
         return (
             <Center>
                 <div id="register" >
-                    <form  data-toggle="Validator" role="form"  >
+                    <form data-toggle="Validator" role="form"  >
 
                         {/* Name Input Field */}
                         <div className="form-group" >
@@ -75,17 +78,22 @@ class Register extends React.Component {
                             </Center>
                             <div className="col-md-12" >
                                 <div className="col-md-6">
-                                    <input onChange={(e) => { this.setState({ first: e.target.value }) }} value={this.state.first} type="text" className="form-control" id="name-input" placeholder="First Name" />
+                                    <input onChange={(e) => { this.setState({ first: e.target.value }) }} value={this.state.first} type="text" className="form-control" id="firstName-input" placeholder="First Name" />
                                 </div>
                                 <div className="col-md-6">
-                                    <input onChange={(e) => { this.setState({ last: e.target.value }) }} value={this.state.last} type="text" className="form-control" id="name-input" placeholder="Last Name" />
+                                    <input onChange={(e) => { this.setState({ last: e.target.value }) }} value={this.state.last} type="text" className="form-control" id="secondName-input" placeholder="Last Name" />
                                 </div>
                             </div>
                         </div>
                         { /* End Name Input Field  */}
 
                         {/* Email Input Field */}
-                        <div className="form-group" style={{paddingTop: 40}} >
+                        <div className="form-group" style={{ paddingTop: 40 }} >
+                            <label htmlFor="username-input">User Name</label>
+                            <input onChange={(e) => { this.setState({ username: e.target.value }) }} value={this.state.username} type="email" className="form-control" id="username-input" placeholder="User Name" />
+                        </div>
+                        {/* Email Input Field */}
+                        <div className="form-group"  >
                             <label htmlFor="email-input">Email Address</label>
                             <input onChange={(e) => { this.setState({ email: e.target.value }) }} value={this.state.email} type="email" className="form-control" id="email-input" placeholder="Email" />
                         </div>
@@ -94,16 +102,16 @@ class Register extends React.Component {
                         {/* Password Input Field */}
                         <div className="form-group" >
                             <label htmlFor="password-input">Password</label>
-                            <input  id="passwordInput" onChange={(e) => { this.setState({ password: e.target.value }) }} value={this.state.password} type="password" className="form-control"  placeholder="Password" required/>
-                             <div class="help-block"> {this.passwordLength(this)} </div>
+                            <input id="passwordInput" onChange={(e) => { this.setState({ password: e.target.value }) }} value={this.state.password} type="password" className="form-control" placeholder="Password" required />
+                            <div className="help-block"> {this.passwordLength(this)} </div>
                         </div>
                         {/* End Password Inout Field  */}
 
                         {/* Confirm Password Input Field */}
                         <div className="form-group" >
                             <label htmlFor="password-input"> Confirm Password</label>
-                            <input onChange={(e) => { this.setState({ confirmPassword: e.target.value }) }} value={this.state.confirmPassword} type="password" className="form-control" id="confirmPasswordInput" placeholder="Confirm Password"  required />
-                            <div class="help-block with-errors"> {this.passwordMatch(this)} </div>
+                            <input onChange={(e) => { this.setState({ confirmPassword: e.target.value }) }} value={this.state.confirmPassword} type="password" className="form-control" id="confirmPasswordInput" placeholder="Confirm Password" required />
+                            <div className="help-block with-errors"> {this.passwordMatch(this)} </div>
                         </div>
                         {/* End Confirm Password Inout Field  */}
 
@@ -121,7 +129,7 @@ class Register extends React.Component {
         )
     }
 
-    
+
 }
 
 export default Register;

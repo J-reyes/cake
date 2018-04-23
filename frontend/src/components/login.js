@@ -9,21 +9,26 @@ class LogIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
+            username: '',
             password: ''
         }
     }
 
 
     logIn() {
-        // debugging
-        console.log(this.state.email);
-        console.log(this.state.password);
+    
 
         // send login info to User API
-        
-
+        axios.post(`http://localhost:3000/users/login`, {
+            username: this.state.username,
+            password: this.state.password
+        })
+            .then(response => {
+                localStorage.setItem('bearer', response.data.token);
+                console.log(localStorage.bearer);
+            })
         //
+        console.log(this.state);
     }
 
     render() {
@@ -34,8 +39,8 @@ class LogIn extends React.Component {
 
                         {/* Email Input Field */}
                         <div className="form-group" >
-                            <label htmlFor="email-input">Email Address</label>
-                            <input onChange={(e) => { this.setState({ email: e.target.value }) }} value={this.state.email} type="email" className="form-control" id="email-input" placeholder="Email" />
+                            <label htmlFor="username-input">Username</label>
+                            <input onChange={(e) => { this.setState({ username: e.target.value }) }} value={this.state.username} type="username" className="form-control" id="username-input" placeholder="username" />
                         </div>
                         {/* Email Input Field End */}
 
@@ -49,7 +54,7 @@ class LogIn extends React.Component {
                         {/* Log In Button */}
                         <Center>
                             <div>
-                                <button onClick={this.logIn.bind(this)} type="button" className="btn btn-primary btn-lg">Log In</button>
+                                <button onClick={(e) => this.logIn()} type="button" className="btn btn-primary">Log In</button>
                             </div>
                         </Center>
                         {/* Log In Button End */}
