@@ -9,8 +9,6 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 import { Line } from 'react-chartjs-2';
-import NavBar from '../navbar';
-
 
 const fakeData = {
     times: [],

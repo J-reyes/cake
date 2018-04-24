@@ -4,7 +4,6 @@ var { User } = require('../models/user');
 
 // GET ALL [/users]
 const index = (req, res) => {
-    console.log(req.token);
 
     jwt.verify(req.token, 'secretKey', (err, authData) => {
         if (err) {
