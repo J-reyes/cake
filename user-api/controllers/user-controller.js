@@ -4,7 +4,6 @@ var { User } = require('../models/user');
 
 // GET ALL [/users]
 const index = (req, res) => {
-
     jwt.verify(req.token, 'secretKey', (err, authData) => {
         if (err) {
             res.json({ error: "Token invalid; token may have expired" })
@@ -12,8 +11,7 @@ const index = (req, res) => {
         else {
             User.find().exec((err, users) => {
                 res.json({ authData, users });
-            }
-            )
+            })
         }
     });
 }
@@ -38,19 +36,26 @@ const getById = (req, res) => {
 
 // POST 
 const create = (req, res) => {
-    jwt.verify(req.token, 'secretKey', (err, authData) => {
-        if (err) {
-            res.json({ error: "Token invalid; token may have expired" })
-        }
-        else {
-            var newUser = new User(req.body);
-            newUser.save((err, user) => {
-                if (err) throw err;
+    var newUser = new User(req.body);
+    newUser.save((err, user) => {
+        if (err) throw err;
 
-                res.json(user);
-            });
-        }
+        res.json(user);
     });
+
+    // jwt.verify(req.token, 'secretKey', (err, authData) => {
+    //     if (err) {
+    //         res.json({ error: "Token invalid; token may have expired" })
+    //     }
+    //     else {
+    //         var newUser = new User(req.body);
+    //         newUser.save((err, user) => {
+    //             if (err) throw err;
+
+    //             res.json(user);
+    //         });
+    //     }
+    // });
 }
 
 // DELETE

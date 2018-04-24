@@ -27,9 +27,6 @@ passport.use(new BasicStrategy(
 const isAuthenticated = passport.authenticate('basic', { session: false });
 
 function verifyToken(req, res, next) {
-    console.log("MIDDLEWARE", req.headers['authorization']);
-
-
     // Get auth header/bearer value
     const bearerHeader = req.headers['authorization'];
     // Check if bearer is undefined
