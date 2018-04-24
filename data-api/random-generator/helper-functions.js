@@ -19,10 +19,6 @@ const randomDate = (start, end) => {
 
 // randomDate(new Date(2018, 0, 1), new Date())
 
-// generates random ip address 
-var ip = (Math.floor(Math.random() * 255) + 1) + "." + (Math.floor(Math.random() * 255) + 0) + "." + (Math.floor(Math.random() * 255) + 0) + "." + (Math.floor(Math.random() * 255) + 0);
-console.log(ip)
-
 
 const cleanNames = dirtyNames => {
     let clean = dirtyNames;

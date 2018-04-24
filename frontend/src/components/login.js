@@ -3,7 +3,7 @@ import Center from 'react-center';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import decode from 'jwt-decode';
-
+import jwt from 'jsonwebtoken';
 
 
 class LogIn extends React.Component {
@@ -25,7 +25,7 @@ class LogIn extends React.Component {
         })
             .then(response => {
                 localStorage.setItem('bearer', response.data.token);
-                console.log(localStorage.bearer);
+                console.log(jwt.decode(localStorage.bearer));
                 this.setState({...this.state, incorrectPassword: false})
             })
             .catch(error => {
@@ -44,9 +44,9 @@ class LogIn extends React.Component {
         }
 
         return (
-            <div className="container col-sm-12" style={{paddingTop: '2em'}} >
+            <div className="container col-sm-12" style={{marginTop: '2em'}} >
                 <div className="h1 row text-center">Cake Fraud Detection</div>
-                <div className="col-sm-6 col-sm-offset-3" style={{paddingTop: '5em'}}>
+                <div className="col-sm-6 col-sm-offset-3" style={{marginTop: '5em'}}>
                     <form className="col-sm-12">
                         {/* Username Input Field */}
                         <div className="form-group" >
@@ -68,7 +68,7 @@ class LogIn extends React.Component {
                         </div>
                         {/* Log In Button */}
                         <div>
-                            <button onClick={(e) => this.logIn()} type="button" className="btn btn-success pull-right">Log In</button>
+                            <button onClick={e => this.logIn()} type="button" className="btn btn-success pull-right">Log In</button>
                         </div>
                         {/* Log In Button End */}
 

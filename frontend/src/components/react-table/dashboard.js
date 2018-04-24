@@ -5,12 +5,13 @@ import { Redirect } from 'react-router-dom';
 
 import { makeData } from './table-data';
 
+import Center from 'react-center';
+
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Link } from 'react-router-dom';
 
 import { Line } from 'react-chartjs-2';
-
-
 
 const fakeData = {
     times: [],
@@ -26,24 +27,38 @@ const range = length => {
 }
 
 
-class TableRender extends Component {
+class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: makeData(),
+            data: [],
             flagged: false
         };
     }
 
+    getData() {
+        var token = localStorage.bearer;
+        axios.get("http://localhost:3000/data/", {
+            'headers': {
+                'authorization': 'Bearer ' + token
+            }
+        })
+            .then(res => {
+                this.setState({data: res.data})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     componentDidMount() {
-        var token = localStorage.bearer
+        var token = localStorage.bearer;
         axios.get("http://localhost:3000/users/tokencheck", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
         })
             .then(res => {
-                console.log(res);
                 if (res.data.success === true) {
                     console.log('token success: ' + res.data.success);
                 }
@@ -56,6 +71,8 @@ class TableRender extends Component {
                 this.setState({ flagged: true });
                 console.log(err);
             })
+        
+        this.getData();
     }
 
     grab = (attribute, data) => data.map(d => d[attribute]);
@@ -77,7 +94,7 @@ class TableRender extends Component {
     render() {
         if (this.state.flagged) {
             return (
-                <Redirect to="/badtoken" />
+                <Redirect to="/" />
             )
         }
 
@@ -106,9 +123,20 @@ class TableRender extends Component {
 
         return (
             <div>
+                {/* <NavBar /> */}
+                <div className="container navbar row">
+                    <div className="col-sm-6 h1"> Fake Cake </div>
+                    <button
+                        className="btn btn-info pull-right"
+                        style={{ marginTop: '1.5em' }}
+                        onClick={e => {
+                            localStorage.removeItem('bearer');
+                            this.componentDidMount();
+                        }} >Log Out</button>
+                </div>
                 <Line
                     data={{
-                        labels: fakeData.times,
+                        labels: [],
                         datasets: [
                             {
                                 label: 'My First dataset',
@@ -124,11 +152,11 @@ class TableRender extends Component {
 
                 />
                 <ReactTable
-                    data={data}
+                    data={this.state.data}
                     columns={[
                         {
-                            Header: "Flag",
-                            accessor: "flagged"
+                            Header: "Fraud",
+                            accessor: "fraud"
                         },
                         {
                             Header: "TimeStamp",
@@ -153,19 +181,22 @@ class TableRender extends Component {
                         {
                             Header: "IP Address",
                             accessor: "ipAddress"
-                        },
-                        {
-                            Header: "Cookies",
-                            accessor: "cookies"
                         }
 
                     ]}
-                    defaultPageSize={10}
+                    defaultPageSize={50}
                     className="-striped -highlight"
                 />
+                <Center>
+                    <div id="register" style={{ marginBottom: 50 }} >
+                        <Link to="/" >
+                            <button className="btn btn-danger btn-lg">Log Out</button>
+                        </Link>
+                    </div>
+                </Center>
             </div>
         )
     }
 }
 
-export default TableRender;
+export default Dashboard;

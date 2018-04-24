@@ -1,5 +1,5 @@
 const Transaction = require('../models/transaction');
-
+const generator = require('../random-generator/generator');
 const request = require('request');
 const { dataBuilder, optionBuilder } = require('../helper/helper-functions');
 
@@ -11,6 +11,24 @@ const index = async (req, res) => {
         res.json(transactions);
     } catch (err) {
         res.status(500).json({ error: err.message })
+    }
+}
+
+// create Data in our DB
+const createFakeData = async (req, res) => {
+    // array of 1000 objects with Transaction Schema
+    const testData = generator(1000, new Date(2018, 3, 1), new Date());
+    try {
+        // insert testData into DB
+        const insertedDoc = await Transaction.insertMany(testData);
+
+        res.json({
+            message: "good transfer",
+            inserted: insertedDoc
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }
 
@@ -53,4 +71,11 @@ const create = async (req, res) => {
 }
 
 
-module.exports = { index, getById, create, update, getFraudData };
+module.exports = { 
+    index, 
+    getById,
+    create, 
+    update,
+    getFraudData,
+    createFakeData
+};
