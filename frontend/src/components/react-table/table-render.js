@@ -9,7 +9,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 import { Line } from 'react-chartjs-2';
-
+import NavBar from '../navbar';
 
 
 const fakeData = {
@@ -43,7 +43,6 @@ class TableRender extends Component {
             }
         })
             .then(res => {
-                console.log(res);
                 if (res.data.success === true) {
                     console.log('token success: ' + res.data.success);
                 }
@@ -77,7 +76,7 @@ class TableRender extends Component {
     render() {
         if (this.state.flagged) {
             return (
-                <Redirect to="/badtoken" />
+                <Redirect to="/" />
             )
         }
 
@@ -106,6 +105,17 @@ class TableRender extends Component {
 
         return (
             <div>
+                {/* <NavBar /> */}
+                <div className="container navbar row">
+                    <div className="col-sm-6 h1"> Fake Cake </div>
+                    <button 
+                        className="btn btn-info pull-right" 
+                        style={{ marginTop: '1.5em' }} 
+                        onClick={e => {
+                            localStorage.clear(); 
+                            this.componentDidMount();
+                            }} >Log Out</button>
+                </div>
                 <Line
                     data={{
                         labels: fakeData.times,

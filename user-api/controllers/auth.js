@@ -40,11 +40,9 @@ function verifyToken(req, res, next) {
         const bearerToken = bearer[1];
         // Set token
         req.token = bearerToken;
-        console.log("REQ TOKEN" + req.token);
         // go to next middleware
         next();
     } else {
-        console.log("ERROR HERE");
         res.json({ 
             error: "No token found"
         })
