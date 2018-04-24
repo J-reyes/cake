@@ -24,7 +24,7 @@ const range = length => {
 }
 
 
-class TableRender extends Component {
+class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -110,7 +110,7 @@ class TableRender extends Component {
                         className="btn btn-info pull-right" 
                         style={{ marginTop: '1.5em' }} 
                         onClick={e => {
-                            localStorage.clear(); 
+                            localStorage.removeItem('bearer'); 
                             this.componentDidMount();
                             }} >Log Out</button>
                 </div>
@@ -176,4 +176,4 @@ class TableRender extends Component {
     }
 }
 
-export default TableRender;
+export default Dashboard;
