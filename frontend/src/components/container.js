@@ -8,6 +8,7 @@ import Center from 'react-center';
 import LogIn from './login';
 import Register from './register';
 import TableRender from './react-table/table-render'
+import BadToken from './bad-token-page';
 
 // Element Import End
 
@@ -20,6 +21,7 @@ class Container extends React.Component {
                     <Route exact path="/" component={LogIn}  />
                     <Route path="/register" component={Register}  />
                     <Route path="/dashboard" component={TableRender} />
+                    <Route path="/badtoken" component={BadToken} />
                 </Switch>
             </div>
         )
