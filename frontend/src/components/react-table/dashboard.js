@@ -5,8 +5,11 @@ import { Redirect } from 'react-router-dom';
 
 import { makeData } from './table-data';
 
+import Center from 'react-center';
+
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Link } from 'react-router-dom';
 
 import { Line } from 'react-chartjs-2';
 
@@ -123,13 +126,13 @@ class Dashboard extends Component {
                 {/* <NavBar /> */}
                 <div className="container navbar row">
                     <div className="col-sm-6 h1"> Fake Cake </div>
-                    <button 
-                        className="btn btn-info pull-right" 
-                        style={{ marginTop: '1.5em' }} 
+                    <button
+                        className="btn btn-info pull-right"
+                        style={{ marginTop: '1.5em' }}
                         onClick={e => {
-                            localStorage.removeItem('bearer'); 
+                            localStorage.removeItem('bearer');
                             this.componentDidMount();
-                            }} >Log Out</button>
+                        }} >Log Out</button>
                 </div>
                 <Line
                     data={{
@@ -184,6 +187,13 @@ class Dashboard extends Component {
                     defaultPageSize={50}
                     className="-striped -highlight"
                 />
+                <Center>
+                    <div id="register" style={{ marginBottom: 50 }} >
+                        <Link to="/" >
+                            <button className="btn btn-danger btn-lg">Log Out</button>
+                        </Link>
+                    </div>
+                </Center>
             </div>
         )
     }
