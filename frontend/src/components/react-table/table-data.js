@@ -33,7 +33,7 @@ const newClick = () => {
 }
 
 //return an array of newClick objects with length that is defined
-export const makeData = (length = 999) => 
+export const makeData = (length = 500) => 
     range(length).map(d => newClick());
 
 // export const dataTime = 

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+
 import { makeData } from './table-data';
 
 import Center from 'react-center';
@@ -9,7 +12,6 @@ import 'react-table/react-table.css';
 import { Link } from 'react-router-dom';
 
 import { Line } from 'react-chartjs-2';
-
 
 const fakeData = {
     times: [],
@@ -25,12 +27,36 @@ const range = length => {
 }
 
 
-class TableRender extends Component {
+class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: makeData(),
         };
+            flagged: false
+        };
+    }
+
+    componentDidMount() {
+        var token = localStorage.bearer
+        axios.get("http://localhost:3000/users/tokencheck", {
+            'headers': {
+                'authorization': 'Bearer ' + token
+            }
+        })
+            .then(res => {
+                if (res.data.success === true) {
+                    console.log('token success: ' + res.data.success);
+                }
+                else {
+                    console.log('token success: ' + res.data.success);
+                    this.setState({ flagged: true });
+                }
+            })
+            .catch(err => {
+                this.setState({ flagged: true });
+                console.log(err);
+            })
     }
 
     grab = (attribute, data) => data.map(d => d[attribute]);
@@ -50,6 +76,12 @@ class TableRender extends Component {
     }
 
     render() {
+        if (this.state.flagged) {
+            return (
+                <Redirect to="/" />
+            )
+        }
+
         const { data } = this.state;
         const xAxis = this.grab("timeStamp", data);
         const yAxis = this.grab("flagged", data);
@@ -57,9 +89,9 @@ class TableRender extends Component {
 
 
         const tableData = this.createCoordinates(xAxis, yAxis);
-        // console.log("line 58:", tableData);
+
         this.sortByTime(tableData, 'x');
-        console.log(tableData[0].x);
+        // console.log(tableData[0].x);
 
         fakeData.times = tableData.map(data => {
             let val = data.x;
@@ -71,13 +103,21 @@ class TableRender extends Component {
             return val;
         })
 
-        // const testData = [{x: 5, y: 'd'}, {x: 3, y: 'b'}, {x: 4, y: 'c'}]
-        // this.sortByTime(testData, 'x');
-        // console.log(testData);
 
 
         return (
             <div>
+                {/* <NavBar /> */}
+                <div className="container navbar row">
+                    <div className="col-sm-6 h1"> Fake Cake </div>
+                    <button
+                        className="btn btn-info pull-right"
+                        style={{ marginTop: '1.5em' }}
+                        onClick={e => {
+                            localStorage.removeItem('bearer');
+                            this.componentDidMount();
+                        }} >Log Out</button>
+                </div>
                 <Line
                     data={{
                         labels: fakeData.times,
@@ -147,4 +187,4 @@ class TableRender extends Component {
     }
 }
 
-export default TableRender;
+export default Dashboard;

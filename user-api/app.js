@@ -18,6 +18,7 @@ var fs = require('fs');
 
 // Route Connections
 var userRouter = require('./routes/users');
+var dataRouter = require('./routes/data');
 
 var app = express();
 app.use(logger('short'));
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // API Routes
 app.use('/users', userRouter);
+app.use('/data', dataRouter);
 
 
 module.exports = app;
