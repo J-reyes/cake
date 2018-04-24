@@ -11,6 +11,7 @@
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
     "float": "^1.0.2",
+    "jsonwebtoken": "^8.2.1",
     "jwt-decode": "^2.2.0",
     "namor": "^1.0.1",
     "react": "^16.2.0",

@@ -4,6 +4,7 @@ const { cleanNames, getRandomIP, getRandomString, randomDate } = require('./help
 
 // ex. let testData = generator(1000, new Date(2018, 3, 1), new Date())
 const generator = (amount, beginningDate, endDate) => {
+    // creates an array of undefined objects of length amount
     let returnArray = [...Array(amount)];
 
     // array full of unsorted objects

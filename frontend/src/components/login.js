@@ -3,7 +3,7 @@ import Center from 'react-center';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import decode from 'jwt-decode';
-
+import jwt from 'jsonwebtoken';
 
 
 class LogIn extends React.Component {
@@ -25,6 +25,7 @@ class LogIn extends React.Component {
         })
             .then(response => {
                 localStorage.setItem('bearer', response.data.token);
+                console.log(jwt.decode(localStorage.bearer));
                 this.setState({...this.state, incorrectPassword: false})
             })
             .catch(error => {
