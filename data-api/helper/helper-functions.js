@@ -28,13 +28,14 @@ const dataBuilder = inputs => ({
 });
 
 
+// Create arbitrary number for data field in MS API
 const ipCruncher = ipString => {
     const ipStr = ipString.split(".").join("");
     const number = parseInt(ipStr.substr(0, 4));
     return number;
 }
 
-// sums up all the attributes in the output object and returns arbitrary bool
+// sums up all the attributes in the output object and returns arbitrary
 const scoreAnalyzer = output => {
     const checkList = ["TSpike", "ZSpike", "rpscore", "rpalert", "tscore", "talert"];
     let sum = 0;
@@ -52,7 +53,7 @@ const requestPromise = options => new Promise((resolve, reject) => {
         if (err != null) {
             return reject(err);
         } else {
-            resolve(body);
+            resolve(JSON.parse(body));
         }
     })
 });

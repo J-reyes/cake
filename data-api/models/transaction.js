@@ -36,7 +36,6 @@ transactionSchema.statics.findWithFraud = async function () {
         let output = await requestPromise(options);
 
         // convert to a an array of objects
-        output = JSON.parse(output);
         output = output["Results"]["output1"];
 
         // convert output objects into a float
