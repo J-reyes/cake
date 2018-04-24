@@ -3,16 +3,6 @@ const Transaction = require('../models/transaction');
 const request = require('request');
 const { dataBuilder, optionBuilder } = require('../helper/helper-functions');
 
-const testData = [
-    {
-        Time: "6/18/2014 12:00:00 AM",
-        Data: 4600
-    },
-    {
-        Time: "6/18/2016 12:00:00 AM",
-        Data: 6009
-    }
-]
 
 // GET
 const index = async (req, res) => {
@@ -24,18 +14,13 @@ const index = async (req, res) => {
     }
 }
 
-const test = (req, response) => {
-    const data = dataBuilder(testData);
-    const options = optionBuilder(process.env.URI, process.env.KEY, data);
-
-    request(options, (err, res, body) => {
-        if (!err && res.statusCode == 200) {
-            response.json(JSON.parse(body));
-        } else {
-            console.log("The request failed with status code: " + res.statusCode);
-            response.json({ error: err });
-        }
-    });
+const getFraudData = async (req, res) => {
+    try {
+        const transactionsWithFraudDetails = await Transaction.findWithFraud();
+        res.json(transactionsWithFraudDetails);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 }
 
 // GET by ID
@@ -68,4 +53,4 @@ const create = async (req, res) => {
 }
 
 
-module.exports = { index, getById, create, update, test };
+module.exports = { index, getById, create, update, getFraudData };

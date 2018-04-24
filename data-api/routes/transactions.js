@@ -5,7 +5,7 @@ var transaction = require('../controllers/transaction-controller');
 
 /* GET users listing. */
 router.get('/', transaction.index);
-router.post('/test', transaction.test);
+router.get('/fraud', transaction.getFraudData);
 router.get('/:id', transaction.getById);
 router.post('/', transaction.create);
 router.put('/:id', transaction.update);
