@@ -37,6 +37,17 @@ const getById = (req, res) => {
     });
 }
 
+const createNewUser = (req, res) => {
+    var newUser = new User(req.body);
+    newUser.save((err, user) => {
+        if (err) throw err;
+
+        res.json(user);
+    })
+}
+
+
+
 // POST 
 const create = (req, res) => {
     jwt.verify(req.token, 'secretKey', (err, authData) => {
@@ -124,5 +135,6 @@ module.exports = {
     create,
     destroy,
     login,
-    tokenCheck
+    tokenCheck,
+    createNewUser
 }

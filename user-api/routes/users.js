@@ -9,6 +9,7 @@ router.get('/byid/:id', auth.verifyToken, userController.getById);
 router.get('/tokencheck', auth.verifyToken, userController.tokenCheck);
 router.post('/', auth.verifyToken, userController.create);
 router.post('/login', userController.login);
+router.post('/register', userController.createNewUser);
 
 
 module.exports = router;
