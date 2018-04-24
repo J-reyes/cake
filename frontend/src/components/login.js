@@ -1,7 +1,7 @@
 import React from 'react';
 import Center from 'react-center';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 
 
@@ -14,12 +14,14 @@ class LogIn extends React.Component {
         }
     }
 
+    class
+
     passwordLength() {
         let password = this.state.password;
 
         let length = password.length;
 
-        if( length < 8) {
+        if (length < 8) {
             return (
                 "Minimum of 8 characters"
             )
@@ -27,7 +29,7 @@ class LogIn extends React.Component {
     }
 
     logIn() {
-    
+
 
         // send login info to User API
         axios.post(`http://localhost:3000/users/login`, {
@@ -59,25 +61,31 @@ class LogIn extends React.Component {
                         <div className="form-group" >
                             <label htmlFor="password-input">Password</label>
                             <input onChange={(e) => { this.setState({ password: e.target.value }) }} value={this.state.password} type="password" className="form-control" id="password-input" placeholder="Password" />
-                            <div class="help-block"> {this.passwordLength(this)} </div>
+                            <div className="help-block"> {this.passwordLength(this)} </div>
                         </div>
                         {/* Password Inout Field End */}
 
                         {/* Log In Button */}
                         <Center>
-                            <div>
-                                <button onClick={(e) => this.logIn()} type="button" className="btn btn-primary">Log In</button>
+                            <div className="col-md-12" >
+                                <div className="col-md-6">
+                                    <button onClick={(e) => this.logIn()} type="button" className="btn btn-primary btn-lg">Log In</button>
+                                </div>
+                                <div className="col-md-6">
+                                    <Link to="/register" >
+                                        <button onClick={(e) => this.logIn()} type="button" className="btn btn-success btn-lg">Register</button>
+                                    </Link>
+                                </div>
                             </div>
                         </Center>
                         {/* Log In Button End */}
-
                     </form>
                 </div>
             </Center>
         )
     }
 
-   
+
 }
 
 export default LogIn

@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { makeData } from './table-data';
 
+import Center from 'react-center';
+
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Link } from 'react-router-dom';
 
 import { Line } from 'react-chartjs-2';
 
@@ -25,24 +28,24 @@ const range = length => {
 class TableRender extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             data: makeData(),
-         };
+        };
     }
 
     grab = (attribute, data) => data.map(d => d[attribute]);
 
-    createCoordinates = (xArray, yArray) => 
+    createCoordinates = (xArray, yArray) =>
         range(xArray.length).map((item, index) => ({
             x: xArray[index],
             y: yArray[index]
         }));
-    
+
     sortByTime = (array, key) => {
-        return array.sort((a,b) => {
+        return array.sort((a, b) => {
             let x = a[key];
             let y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1: 0));
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         })
     }
 
@@ -51,8 +54,8 @@ class TableRender extends Component {
         const xAxis = this.grab("timeStamp", data);
         const yAxis = this.grab("flagged", data);
 
-        
-        
+
+
         const tableData = this.createCoordinates(xAxis, yAxis);
         // console.log("line 58:", tableData);
         this.sortByTime(tableData, 'x');
@@ -73,27 +76,27 @@ class TableRender extends Component {
         // console.log(testData);
 
 
-        return ( 
+        return (
             <div>
-                <Line 
+                <Line
                     data={{
                         labels: fakeData.times,
                         datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'rgba(255,99,132,0.2)',
-                            borderColor: 'rgba(255,99,132,1)',
-                            borderWidth: 1,
-                            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                            hoverBorderColor: 'rgba(255,99,132,1)',
-                            data: fakeData.labels
-                          }
+                            {
+                                label: 'My First dataset',
+                                backgroundColor: 'rgba(255,99,132,0.2)',
+                                borderColor: 'rgba(255,99,132,1)',
+                                borderWidth: 1,
+                                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                                hoverBorderColor: 'rgba(255,99,132,1)',
+                                data: fakeData.labels
+                            }
                         ]
-                      }}
+                    }}
 
                 />
                 <ReactTable
-                    data={ data }
+                    data={data}
                     columns={[
                         {
                             Header: "Flag",
@@ -127,14 +130,21 @@ class TableRender extends Component {
                             Header: "Cookies",
                             accessor: "cookies"
                         }
-                        
+
                     ]}
                     defaultPageSize={10}
                     className="-striped -highlight"
                 />
+                <Center>
+                    <div id="register" style={{ marginBottom: 50 }} >
+                        <Link to="/" >
+                            <button className="btn btn-danger btn-lg">Log Out</button>
+                        </Link>
+                    </div>
+                </Center>
             </div>
-         )
+        )
     }
 }
- 
+
 export default TableRender;
