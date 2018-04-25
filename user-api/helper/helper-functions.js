@@ -51,7 +51,7 @@ const getTransactionsOnDay = (date, transactions) => transactions.filter(t => co
 const getFraudRatioOnDay = (date, transactions) => {
     const transactionsOnDate = getTransactionsOnDay(date, transactions);
     const amtTransactions = transactionsOnDate.length;
-    const amtFraud = transactionsOnDate.filter(t => t.fraud > -0.5).length;
+    const amtFraud = transactionsOnDate.filter(t => t.fraud > -0.75).length;
 
 
     // avoid division by zero

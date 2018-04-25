@@ -17,7 +17,7 @@ const index = async (req, res) => {
 // create Data in our DB
 const createFakeData = async (req, res) => {
     // array of 1000 objects with Transaction Schema
-    const testData = generator(1000, new Date(2018, 3, 1), new Date(), createClickObject);
+    const testData = generator(12000, new Date(2017, 3, 1), new Date(), createClickObject);
     try {
         // insert testData into DB
         const insertedDoc = await Transaction.insertMany(testData);
