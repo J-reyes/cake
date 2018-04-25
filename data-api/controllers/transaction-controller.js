@@ -1,5 +1,5 @@
 const Transaction = require('../models/transaction');
-const generator = require('../random-generator/generator');
+const { generator, createClickObject } = require('../random-generator/generator');
 const request = require('request');
 const { dataBuilder, optionBuilder } = require('../helper/helper-functions');
 
@@ -17,7 +17,7 @@ const index = async (req, res) => {
 // create Data in our DB
 const createFakeData = async (req, res) => {
     // array of 1000 objects with Transaction Schema
-    const testData = generator(1000, new Date(2018, 3, 1), new Date());
+    const testData = generator(1000, new Date(2018, 3, 1), new Date(), createClickObject);
     try {
         // insert testData into DB
         const insertedDoc = await Transaction.insertMany(testData);
@@ -71,10 +71,10 @@ const create = async (req, res) => {
 }
 
 
-module.exports = { 
-    index, 
+module.exports = {
+    index,
     getById,
-    create, 
+    create,
     update,
     getFraudData,
     createFakeData

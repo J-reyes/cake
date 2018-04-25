@@ -1,4 +1,4 @@
-
+// grabs a random index from array
 const getRandomString = arrOfStrings =>
     arrOfStrings[Math.floor(Math.random() * arrOfStrings.length)];
 
@@ -8,7 +8,7 @@ const getRandomIP = () =>
     + (Math.floor(Math.random() * 255) + 0) + "."
     + (Math.floor(Math.random() * 255) + 0);
 
-
+// randomDate(new Date(2018, 0, 1), new Date())
 // generates random time stamp
 const randomDate = (start, end) => {
     const options = { hour: 'numeric', year: 'numeric', month: 'long', day: 'numeric', minute: 'numeric' };
@@ -17,9 +17,17 @@ const randomDate = (start, end) => {
     return randomDate.toLocaleDateString("en-US", options);
 }
 
-// randomDate(new Date(2018, 0, 1), new Date())
+// generate random cookie strings
+const randomCookie = (cookieName, cookieValue, startDay, expireDay) => {
+    let d = new Date();
+    let start = new Date(startDay);
+    d.setTime(start.getTime() + (expireDay*24*60*60*1000));
+    let expires = "expires=" + d.toUTCString();
+    return `${cookieName}=${cookieValue};${expires};path=/`
+}
 
 
+// formatter for data.js
 const cleanNames = dirtyNames => {
     let clean = dirtyNames;
 
@@ -54,4 +62,10 @@ const removeNumbersFromFront = str => {
     }
 }
 
-module.exports = { cleanNames, getRandomIP, getRandomString, randomDate }
+module.exports = {
+    cleanNames,
+    getRandomIP,
+    getRandomString,
+    randomDate,
+    randomCookie
+}
