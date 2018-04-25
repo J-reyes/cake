@@ -63,8 +63,8 @@ const getFraudRatioOnDay = (date, transactions) => {
 }
 
 // builds an array of dates between two dates (inclusive)
-// must be same year!
-// [date(4/1/2018), date(4/2/2018)]
+// must be same year OR start must be before end date!
+// ex: [date(4/1/2018), date(4/2/2018)] 
 
 const buildDateArray = (start, end) => {
     let arr = [];
