@@ -5,5 +5,6 @@ var dataController = require('../controllers/data-controller');
 var auth = require('../controllers/auth');
 
 router.get('/', auth.verifyToken, dataController.index);
+router.post('/byday', dataController.getDayInformation);
 
 module.exports = router;
