@@ -12,10 +12,7 @@ import { Link } from 'react-router-dom';
 
 import { Line } from 'react-chartjs-2';
 
-const fakeData = {
-    times: [],
-    labels: []
-}
+import FakeDataChart from './test-chart';
 
 const range = length => {
     const array = [];
@@ -25,69 +22,75 @@ const range = length => {
     return array;
 }
 
-
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            flagged: false
+            flagged: false,
+            chartData: {
+                day: [],
+                fraudIndex: []
+            }
         };
     }
 
+    getChartData() {
+        axios.post("http://localhost:3000/data/byday", {
+            startDate: "04/04/2018",
+            endDate: "04/11/2018"
+        }).then(res => {
+            const data = res.data;
+            const days = Object.keys(data);
+            const fraudRatio = Object.values(data).map(day => day.fraudRatio * 100)
+
+            this.setState({
+                chartData: {
+                    day: days,
+                    fraudIndex: fraudRatio,
+                }
+            });
+            console.log(res.data);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    // Gives token before receiving data from data-api
     getData() {
         var token = localStorage.bearer;
         axios.get("http://localhost:3000/data/", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
+        }).then(res => {
+            this.setState({ data: res.data });
+        }).catch(err => {
+            console.log(err);
         })
-            .then(res => {
-                this.setState({data: res.data})
-            })
-            .catch(err => {
-                console.log(err);
-            })
     }
 
+    // Checks token before rendering page
     componentDidMount() {
         var token = localStorage.bearer;
         axios.get("http://localhost:3000/users/tokencheck", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
-        })
-            .then(res => {
-                if (res.data.success === true) {
-                    console.log('token success: ' + res.data.success);
-                }
-                else {
-                    console.log('token success: ' + res.data.success);
-                    this.setState({ flagged: true });
-                }
-            })
-            .catch(err => {
+        }).then(res => {
+            if (res.data.success === true) {
+                console.log('token success: ' + res.data.success);
+            }
+            else {
+                console.log('token success: ' + res.data.success);
                 this.setState({ flagged: true });
-                console.log(err);
-            })
-        
-        this.getData();
-    }
-
-    grab = (attribute, data) => data.map(d => d[attribute]);
-
-    createCoordinates = (xArray, yArray) =>
-        range(xArray.length).map((item, index) => ({
-            x: xArray[index],
-            y: yArray[index]
-        }));
-
-    sortByTime = (array, key) => {
-        return array.sort((a, b) => {
-            let x = a[key];
-            let y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            }
+        }).catch(err => {
+            this.setState({ flagged: true });
+            console.log(err);
         })
+        this.getData();
+        this.getChartData();
     }
 
     render() {
@@ -96,29 +99,6 @@ class Dashboard extends Component {
                 <Redirect to="/" />
             )
         }
-
-        const { data } = this.state;
-        const xAxis = this.grab("timeStamp", data);
-        const yAxis = this.grab("flagged", data);
-
-
-
-        const tableData = this.createCoordinates(xAxis, yAxis);
-
-        this.sortByTime(tableData, 'x');
-        // console.log(tableData[0].x);
-
-        fakeData.times = tableData.map(data => {
-            let val = data.x;
-            return val;
-        })
-
-        fakeData.labels = tableData.map(data => {
-            let val = data.y;
-            return val;
-        })
-
-
 
         return (
             <div>
@@ -133,23 +113,37 @@ class Dashboard extends Component {
                             this.componentDidMount();
                         }} >Log Out</button>
                 </div>
+                {/* Chartjs */}
                 <Line
                     data={{
-                        labels: [],
+                        labels: this.state.chartData.day,
                         datasets: [
                             {
-                                label: 'My First dataset',
+                                label: 'Fraud Index per Day',
                                 backgroundColor: 'rgba(255,99,132,0.2)',
                                 borderColor: 'rgba(255,99,132,1)',
                                 borderWidth: 1,
                                 hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                                 hoverBorderColor: 'rgba(255,99,132,1)',
-                                data: fakeData.labels
+                                data: this.state.chartData.fraudIndex
                             }
-                        ]
+                        ],
+
+                    }}
+                    options={{
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    suggestedMin: 0,
+                                    suggestedMax: 100
+                                }
+                            }]
+                        }
                     }}
 
                 />
+                {/* <FakeDataChart /> */}
+                {/* React Table */}
                 <ReactTable
                     data={this.state.data}
                     columns={[
