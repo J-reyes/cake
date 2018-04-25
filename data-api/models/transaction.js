@@ -16,7 +16,8 @@ var transactionSchema = new Schema({
     affiliate: String,
     userAgent: String,
     location: String,
-    ipAddress: String
+    ipAddress: String,
+    cookies: String
 });
 
 
