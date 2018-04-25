@@ -1,7 +1,7 @@
 import React from 'react';
 import Center from 'react-center';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -33,9 +33,9 @@ class Register extends React.Component {
 
         let length = password.length;
 
-        if (length < 8) {
+        if (length < 6) {
             return (
-                "Minimum of 8 characters"
+                "Minimum of 6 characters"
             )
         }
     }
@@ -118,9 +118,7 @@ class Register extends React.Component {
                         {/* Register Button */}
                         <Center>
                             <div>
-                                <Link to="/dashboard" >
-                                    <button onClick={this.registerUser.bind(this)} type="button" className="btn btn-warning btn-lg">Register</button>
-                                </Link>
+                                <button onClick={this.registerUser.bind(this)} type="button" className="btn btn-success btn-lg">Register</button>
                             </div>
                         </Center>
                         {/* End Register Button  */}

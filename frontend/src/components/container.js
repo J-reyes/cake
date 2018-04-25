@@ -13,15 +13,10 @@ import BadToken from './bad-token-page';
 // Element Import End
 
 class Container extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-
 
     render() {
         return (
-            <div className="container"   >
+            <div className="container" >
                 <Switch>
                     <Route exact path="/" component={LogIn}  />
                     <Route path="/register" component={Register}  />

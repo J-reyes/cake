@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 
 import { makeData } from './table-data';
 
-import Center from 'react-center';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -31,14 +30,28 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: makeData(),
-        };
+            data: [],
             flagged: false
         };
     }
 
+    getData() {
+        var token = localStorage.bearer;
+        axios.get("http://localhost:3000/data/", {
+            'headers': {
+                'authorization': 'Bearer ' + token
+            }
+        })
+            .then(res => {
+                this.setState({data: res.data})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     componentDidMount() {
-        var token = localStorage.bearer
+        var token = localStorage.bearer;
         axios.get("http://localhost:3000/users/tokencheck", {
             'headers': {
                 'authorization': 'Bearer ' + token
@@ -57,6 +70,8 @@ class Dashboard extends Component {
                 this.setState({ flagged: true });
                 console.log(err);
             })
+        
+        this.getData();
     }
 
     grab = (attribute, data) => data.map(d => d[attribute]);
@@ -120,7 +135,7 @@ class Dashboard extends Component {
                 </div>
                 <Line
                     data={{
-                        labels: fakeData.times,
+                        labels: [],
                         datasets: [
                             {
                                 label: 'My First dataset',
@@ -136,11 +151,11 @@ class Dashboard extends Component {
 
                 />
                 <ReactTable
-                    data={data}
+                    data={this.state.data}
                     columns={[
                         {
-                            Header: "Flag",
-                            accessor: "flagged"
+                            Header: "Fraud",
+                            accessor: "fraud"
                         },
                         {
                             Header: "TimeStamp",
@@ -165,23 +180,12 @@ class Dashboard extends Component {
                         {
                             Header: "IP Address",
                             accessor: "ipAddress"
-                        },
-                        {
-                            Header: "Cookies",
-                            accessor: "cookies"
                         }
 
                     ]}
-                    defaultPageSize={10}
+                    defaultPageSize={50}
                     className="-striped -highlight"
                 />
-                <Center>
-                    <div id="register" style={{ marginBottom: 50 }} >
-                        <Link to="/" >
-                            <button className="btn btn-danger btn-lg">Log Out</button>
-                        </Link>
-                    </div>
-                </Center>
             </div>
         )
     }

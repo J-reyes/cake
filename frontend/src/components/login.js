@@ -1,9 +1,9 @@
 import React from 'react';
 import Center from 'react-center';
 import axios from 'axios';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import decode from 'jwt-decode';
-
+import jwt from 'jsonwebtoken';
 
 
 class LogIn extends React.Component {
@@ -16,23 +16,8 @@ class LogIn extends React.Component {
         }
     }
 
-    class
-
-    passwordLength() {
-        let password = this.state.password;
-
-        let length = password.length;
-
-        if (length < 8) {
-            return (
-                "Minimum of 8 characters"
-            )
-        }
-    }
 
     logIn() {
-
-
         // send login info to User API
         axios.post(`http://localhost:3000/users/login`, {
             username: this.state.username,
@@ -40,6 +25,7 @@ class LogIn extends React.Component {
         })
             .then(response => {
                 localStorage.setItem('bearer', response.data.token);
+                console.log(jwt.decode(localStorage.bearer));
                 this.setState({...this.state, incorrectPassword: false})
             })
             .catch(error => {
@@ -72,7 +58,6 @@ class LogIn extends React.Component {
                         <div className="form-group" >
                             <label htmlFor="password-input">Password</label>
                             <input onChange={(e) => { this.setState({ password: e.target.value }) }} value={this.state.password} type="password" className="form-control" id="password-input" placeholder="Password" />
-                            <div className="help-block"> {this.passwordLength(this)} </div>
                         </div>
                         {/* Password Inout Field End */}
 
@@ -82,19 +67,11 @@ class LogIn extends React.Component {
                             }
                         </div>
                         {/* Log In Button */}
-                        <Center>
-                            <div className="col-md-12" >
-                                <div className="col-md-6">
-                                    <button onClick={(e) => this.logIn()} type="button" className="btn btn-primary btn-lg">Log In</button>
-                                </div>
-                                <div className="col-md-6">
-                                    <Link to="/register" >
-                                        <button onClick={(e) => this.logIn()} type="button" className="btn btn-success btn-lg">Register</button>
-                                    </Link>
-                                </div>
-                            </div>
-                        </Center>
+                        <div>
+                            <button onClick={e => this.logIn()} type="button" className="btn btn-success pull-right">Log In</button>
+                        </div>
                         {/* Log In Button End */}
+
                     </form>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var { requestPromise } = require('../helper/helper-functions');
+var { requestPromise, filterDateData } = require('../helper/helper-functions');
 
 // GET ALL [/data]
 const index = (req, res) => {
@@ -13,7 +13,15 @@ const index = (req, res) => {
     })
 }
 
+// POST transactions by date 
+// startDate and endDate format : "mm/dd/yyyy"
+const getDayInformation = async (req, res) => {
+    let json = await requestPromise(process.env.DATA_API_URL);
+    let dayInfo = filterDateData(new Date(req.body.startDate), new Date(req.body.endDate), json);
+    res.json(dayInfo);
+}
 
 
 
-module.exports = { index }
+
+module.exports = { index, getDayInformation }
