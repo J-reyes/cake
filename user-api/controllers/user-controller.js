@@ -43,6 +43,8 @@ const create = (req, res) => {
         res.json(user);
     });
 
+    
+
     // jwt.verify(req.token, 'secretKey', (err, authData) => {
     //     if (err) {
     //         res.json({ error: "Token invalid; token may have expired" })
