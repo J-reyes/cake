@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 
 import { makeData } from './table-data';
 
-import Center from 'react-center';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -187,13 +186,6 @@ class Dashboard extends Component {
                     defaultPageSize={50}
                     className="-striped -highlight"
                 />
-                <Center>
-                    <div id="register" style={{ marginBottom: 50 }} >
-                        <Link to="/" >
-                            <button className="btn btn-danger btn-lg">Log Out</button>
-                        </Link>
-                    </div>
-                </Center>
             </div>
         )
     }
