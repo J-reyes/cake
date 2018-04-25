@@ -21,7 +21,13 @@ const getDayInformation = async (req, res) => {
     res.json(dayInfo);
 }
 
+const getImpressions = async (req, res) => {
+    let json = await requestPromise(process.env.DATA_API_URL_IMPRESSION);
+    let dayInfo = filterDateData(new Date(req.body.startDate), new Date(req.body.endDate), json);
+    res.json(dayInfo);
+}
 
 
 
-module.exports = { index, getDayInformation }
+
+module.exports = { index, getDayInformation, getImpressions}
