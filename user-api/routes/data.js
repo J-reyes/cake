@@ -6,5 +6,6 @@ var auth = require('../controllers/auth');
 
 router.get('/', auth.verifyToken, dataController.index);
 router.post('/byday', dataController.getDayInformation);
+router.post('/impressionsbyday', dataController.getImpressions);
 
 module.exports = router;

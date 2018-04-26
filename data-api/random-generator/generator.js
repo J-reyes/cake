@@ -28,6 +28,15 @@ const createClickObject = (beginningDate, endDate) => {
     }
 }
 
+
+const createImpressionObject = (beginningDate, endDate) => ({
+    timeStamp: randomDate(beginningDate, endDate),
+    campaign: getRandomString(campaign),
+    affiliate: getRandomString(affiliate),
+    userAgent: getRandomString(names),
+    location: getRandomString(cities)
+})
+
 const sortByDate = (a, b) => {
     const firstTime = new Date(a.timeStamp).getTime();
     const secondTime = new Date(b.timeStamp).getTime();
@@ -41,4 +50,4 @@ const sortByDate = (a, b) => {
     return 0;
 }
 
-module.exports = { generator, createClickObject };
+module.exports = { generator, createClickObject, createImpressionObject };

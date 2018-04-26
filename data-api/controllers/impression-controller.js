@@ -1,14 +1,13 @@
-const Transaction = require('../models/transaction');
-const { generator, createClickObject } = require('../random-generator/generator');
+const Impression = require('../models/impression');
+const { generator, createImpressionObject } = require('../random-generator/generator');
 const request = require('request');
 const { dataBuilder, optionBuilder } = require('../helper/helper-functions');
 
-
-// GET
+//GET
 const index = async (req, res) => {
     try {
-        const transactions = await Transaction.find();
-        res.json(transactions);
+        const impressions = await Impression.find();
+        res.json(impressions);
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
@@ -16,17 +15,16 @@ const index = async (req, res) => {
 
 // create Data in our DB
 const createFakeData = async (req, res) => {
-    // array of 1000 objects with Transaction Schema
-    const testData = generator(12000, new Date(2017, 3, 1), new Date(), createClickObject);
+    // array of 1000 objects with Impression schema
+    const testData = generator(1000, new Date(2018, 3, 1), new Date(), createImpressionObject);
     try {
         // insert testData into DB
-        const insertedDoc = await Transaction.insertMany(testData);
+        const insertedDoc = await Impression.insertMany(testData);
 
         res.json({
             message: "good transfer",
             inserted: insertedDoc
         });
-
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -34,8 +32,8 @@ const createFakeData = async (req, res) => {
 
 const getFraudData = async (req, res) => {
     try {
-        const transactionsWithFraudDetails = await Transaction.findWithFraud();
-        res.json(transactionsWithFraudDetails);
+        const impressionsWithFraudDetails = await Impression.findWithFraud();
+        res.json(impressionsWithFraudDetails);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -44,17 +42,17 @@ const getFraudData = async (req, res) => {
 // GET by ID
 const getById = async (req, res) => {
     try {
-        const transaction = await Transaction.findById(req.params.id);
-        res.json(transaction);
+        const impression = await Impression.findById(req.params.id);
+        res.json(impression);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
 
 const update = async (req, res) => {
-    try {
-        const transaction = await Transaction.findByIdAndUpdate(req.params.id, { ...req.body }, { new: true });
-        res.json(transaction);
+    try{
+        const impression = await Impression.findByIdAndUpdate(req.params.id, {...req.body}, {new: true});
+        res.json(impression);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -62,14 +60,13 @@ const update = async (req, res) => {
 
 // POST
 const create = async (req, res) => {
-    try {
-        const transaction = await Transaction.create(req.body);
-        res.json(transaction);
+    try{
+        const impression = await Impression.create(req.body);
+        res.json(impression);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.mesage });
     }
 }
-
 
 module.exports = {
     index,

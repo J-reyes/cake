@@ -58,6 +58,15 @@ const requestPromise = options => new Promise((resolve, reject) => {
     })
 });
 
+// sum up all the ASCII values of a string
+const charCodeCalculator = str => {
+    // turns string into array of individual char
+    let arrOfStr = str.split("");
+
+    // return sum of each char code
+    return arrOfStr.reduce((sum, char) => sum + char.charCodeAt(0), 0)
+}
 
 
-module.exports = { optionBuilder, dataBuilder, ipCruncher, scoreAnalyzer, requestPromise }
+
+module.exports = { optionBuilder, dataBuilder, ipCruncher, scoreAnalyzer, requestPromise, charCodeCalculator }
