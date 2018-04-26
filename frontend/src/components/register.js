@@ -12,7 +12,6 @@ class Register extends React.Component {
 
             first: '',
             last: '',
-
             username: '',
             email: '',
             password: '',
@@ -33,25 +32,25 @@ class Register extends React.Component {
 
         let length = password.length;
 
-        if (length < 6) {
+        if (length < 8) {
             return (
-                "Minimum of 6 characters"
+                "Minimum of 8 characters"
             )
         }
     }
 
-
+    
     registerUser() {
 
         var body = {
-            name: this.state.first + " " + this.state.last,
+            name: this.state.first + " " +this.state.last,
             username: this.state.username,
             email: this.state.email,
-            password: this.state.password,
+            password: this.state.password
         }
 
         // register user with User API
-        axios.post('http://localhost:3000/users/', body)
+        axios.post('http://localhost:3030/users/', body)
             .then(response => {
                 this.setState({
                     first: '',
@@ -59,16 +58,26 @@ class Register extends React.Component {
                     username: '',
                     email: '',
                     password: '',
-                    confirmPassword: ''
+                    confirmPassword: '',
+                    registerClicked: true   
                 })
             })
-        // Debugging
+      
     }
 
+    
+
     render() {
+
+        if (this.state.registerClicked === true) {
+            return (
+                <Redirect to="/" />
+            )
+        }
+
         return (
             <Center>
-                <div id="register" >
+                <div style={{marginTop: 80}}  >
                     <form data-toggle="Validator" role="form"  >
 
                         {/* Name Input Field */}
