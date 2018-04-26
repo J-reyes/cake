@@ -12,26 +12,35 @@ class LogIn extends React.Component {
         this.state = {
             username: '',
             password: '',
-            incorrectPassword: null
+            incorrectPassword: null,
+            registerClicked: null
         }
     }
 
+    
 
     logIn() {
         // send login info to User API
-        axios.post(`http://localhost:3000/users/login`, {
+        axios.post(`http://localhost:3030/users/login`, {
             username: this.state.username,
             password: this.state.password
         })
             .then(response => {
                 localStorage.setItem('bearer', response.data.token);
                 console.log(jwt.decode(localStorage.bearer));
-                this.setState({...this.state, incorrectPassword: false})
+                this.setState({ ...this.state, incorrectPassword: false })
             })
             .catch(error => {
                 this.setState({ ...this.state, incorrectPassword: true })
                 console.log("incorrect password:; " + error);
             })
+    }
+
+    register() {
+        this.setState ({
+            ...this.state,
+            registerClicked: true
+        })
     }
 
 
@@ -43,10 +52,20 @@ class LogIn extends React.Component {
             )
         }
 
+        if (this.state.registerClicked === true) {
+            return (
+                <Redirect to="/register" />
+            )
+        }
+
+
+
+
+
         return (
-            <div className="container col-sm-12" style={{marginTop: '2em'}} >
+            <div className="container col-sm-12" style={{ marginTop: '2em' }} >
                 <div className="h1 row text-center">Cake Fraud Detection</div>
-                <div className="col-sm-6 col-sm-offset-3" style={{marginTop: '5em'}}>
+                <div className="col-sm-6 col-sm-offset-3" style={{ marginTop: '5em' }}>
                     <form className="col-sm-12">
                         {/* Username Input Field */}
                         <div className="form-group" >
@@ -63,7 +82,7 @@ class LogIn extends React.Component {
 
                         <div>
                             {
-                                this.state.incorrectPassword ? <div style={{color: 'red'}} >incorrect username or password</div> : false
+                                this.state.incorrectPassword ? <div style={{ color: 'red' }} >incorrect username or password</div> : false
                             }
                         </div>
                         {/* Log In Button */}
@@ -71,7 +90,9 @@ class LogIn extends React.Component {
                             <button onClick={e => this.logIn()} type="button" className="btn btn-success pull-right">Log In</button>
                         </div>
                         {/* Log In Button End */}
-
+                        <div>
+                            <span onClick={e => this.register()}>Register</span>
+                        </div>
                     </form>
                 </div>
             </div>

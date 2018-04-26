@@ -3,3 +3,5 @@ package-lock.json
 *.env
 *.vscode
 *.DS_Store
+user-api/models/user.js
+user-api/controllers/user-controller.js

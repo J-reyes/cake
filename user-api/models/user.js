@@ -1,11 +1,10 @@
 // import { isMaster } from 'cluster';
 
 var mongoose = require('mongoose');
+
 var Schema = mongoose.Schema;
 
 var bcrypt = require('bcryptjs');
-
-
 
 var userSchema = new Schema({
     name: {
