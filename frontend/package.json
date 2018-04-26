@@ -14,6 +14,7 @@
     "float": "^1.0.2",
     "jsonwebtoken": "^8.2.1",
     "jwt-decode": "^2.2.0",
+    "match-sorter": "^2.2.1",
     "namor": "^1.0.1",
     "react": "^16.2.0",
     "react-center": "^1.1.1",
