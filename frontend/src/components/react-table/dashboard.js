@@ -42,13 +42,6 @@ class Dashboard extends Component {
         };
     }
 
-    // 1 Day  = new Date().toLocaleString("en-US", options)
-    // 3 Day = endDate = new Date(), startDate = new Date() + 3
-    // 7 Day = endDate = new Date(), startDate = new Date + 7
-    // 1 month
-    // 3 month
-    // 6 month
-    // 1 year
 
     dateToday() {
         const date = new Date().toLocaleDateString("en-US");
@@ -60,17 +53,11 @@ class Dashboard extends Component {
         const startDate = new Date();
         startDate.setDate(date.getDate() - daysBack);
         return startDate.toLocaleDateString("en-US");
-        // this.setState(
-        //     {
-        //         chartData: {
-        //             ...this.state.chartData,
-        //             startDate: startDate.toLocaleDateString("en-US")
-        //         }
-        //     })
+
     }
 
     getChartData() {
-        axios.post("http://localhost:3000/data/byday", {
+        axios.post("https://agile-shelf-11349.herokuapp.com/data/byday", {
             startDate: this.setStartDate(370),
             endDate: this.dateToday()
         }).then(res => {
@@ -113,7 +100,7 @@ class Dashboard extends Component {
     // Gives token before receiving data from data-api
     getData() {
         var token = localStorage.bearer;
-        axios.get("http://localhost:3000/data/", {
+        axios.get("https://agile-shelf-11349.herokuapp.com/data/", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
@@ -128,13 +115,14 @@ class Dashboard extends Component {
     // Checks token before rendering page
     componentDidMount() {
         var token = localStorage.bearer;
-        axios.get("http://localhost:3000/users/tokencheck", {
+        axios.get("https://agile-shelf-11349.herokuapp.com/users/tokencheck", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
         }).then(res => {
             if (res.data.success === true) {
                 console.log('token success: ' + res.data.success);
+                
             }
             else {
                 console.log('token success: ' + res.data.success);
