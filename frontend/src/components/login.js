@@ -12,47 +12,56 @@ class LogIn extends React.Component {
         this.state = {
             username: '',
             password: '',
-            incorrectPassword: null,
-            registerClicked: null
+            correctPassword: false,
+            registerClicked: false,
+            loginClicked: false
         }
     }
 
-    
 
-    logIn() {
+
+    logIn = async () => {
         // send login info to User API
-        axios.post(`http://localhost:3030/users/login`, {
-            username: this.state.username,
-            password: this.state.password
-        })
-            .then(response => {
+        try {
+            // login call
+            let response = await axios.post(`https://agile-shelf-11349.herokuapp.com/users/login`, {
+                username: this.state.username,
+                password: this.state.password
+            });
+
+            // result of login
+            const correctPassword = response.data.success;
+            const loginClicked = true;
+            
+            if (correctPassword) {
+                // save token to computer
                 localStorage.setItem('bearer', response.data.token);
-                console.log(jwt.decode(localStorage.bearer));
-                this.setState({ ...this.state, incorrectPassword: false })
-            })
-            .catch(error => {
-                this.setState({ ...this.state, incorrectPassword: true })
-                console.log("incorrect password:; " + error);
-            })
+            }
+            
+            this.setState({
+                correctPassword,
+                loginClicked
+            });
+
+        } catch (err) {
+            console.log("AXIOS ERROR:" ,err.message);
+        }
     }
 
     register() {
-        this.setState ({
-            ...this.state,
-            registerClicked: true
-        })
+        this.setState({ registerClicked: true });
     }
 
 
 
     render() {
-        if (this.state.incorrectPassword === false) {
+        if (this.state.correctPassword) {
             return (
                 <Redirect to="/dashboard" />
             )
         }
 
-        if (this.state.registerClicked === true) {
+        if (this.state.registerClicked) {
             return (
                 <Redirect to="/register" />
             )
@@ -82,7 +91,7 @@ class LogIn extends React.Component {
 
                         <div>
                             {
-                                this.state.incorrectPassword ? <div style={{ color: 'red' }} >incorrect username or password</div> : false
+                                (!this.state.correctPassword && this.state.loginClicked) ? <div style={{ color: 'red' }} >incorrect username or password</div> : ""
                             }
                         </div>
                         {/* Log In Button */}

@@ -9,13 +9,15 @@ class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
             first: '',
             last: '',
             username: '',
             email: '',
             password: '',
             confirmPassword: '',
+            registrationCode: '',
+            registerClicked: false,
+            failedRegistration: false
         }
     }
 
@@ -32,44 +34,62 @@ class Register extends React.Component {
 
         let length = password.length;
 
-        if (length < 8) {
+        if (length < 6) {
             return (
-                "Minimum of 8 characters"
+                "Minimum of 6 characters"
             )
         }
     }
 
-    
+
     registerUser() {
 
         var body = {
-            name: this.state.first + " " +this.state.last,
+            name: this.state.first + " " + this.state.last,
             username: this.state.username,
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password,
+            registrationCode: this.state.registrationCode
         }
 
-        // register user with User API
-        axios.post('http://localhost:3030/users/', body)
-            .then(response => {
-                this.setState({
-                    first: '',
-                    last: '',
-                    username: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: '',
-                    registerClicked: true   
-                })
-            })
-      
-    }
 
-    
+        // register user with User API
+        axios.post('https://agile-shelf-11349.herokuapp.com/users/register',
+            body,
+            {
+                'headers': {
+                    'key': this.state.registrationCode
+                }
+            }
+        )
+            .then(res => {
+                if (res.data.success) {
+                    console.log("NEW USER", res.data.user);
+                    this.setState({
+                        first: '',
+                        last: '',
+                        username: '',
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
+                        registrationCode: '',
+                        registerClicked: true
+                    });
+
+                } else {
+                    console.log("REGISTRATION UNSUCCESSFUL");
+                    this.setState({
+                        failedRegistration: true
+                    })
+                }
+
+            })
+
+    }
 
     render() {
 
-        if (this.state.registerClicked === true) {
+        if (this.state.registerClicked) {
             return (
                 <Redirect to="/" />
             )
@@ -77,7 +97,7 @@ class Register extends React.Component {
 
         return (
             <Center>
-                <div style={{marginTop: 80}}  >
+                <div id="register" >
                     <form data-toggle="Validator" role="form"  >
 
                         {/* Name Input Field */}
@@ -118,16 +138,29 @@ class Register extends React.Component {
 
                         {/* Confirm Password Input Field */}
                         <div className="form-group" >
-                            <label htmlFor="password-input"> Confirm Password</label>
+                            <label htmlFor="password-input">Confirm Password</label>
                             <input onChange={(e) => { this.setState({ confirmPassword: e.target.value }) }} value={this.state.confirmPassword} type="password" className="form-control" id="confirmPasswordInput" placeholder="Confirm Password" required />
                             <div className="help-block with-errors"> {this.passwordMatch(this)} </div>
                         </div>
                         {/* End Confirm Password Inout Field  */}
 
+                        <div className="form-group">
+                            <label>Registration Code</label>
+                            <input onChange={e => { this.setState({ registrationCode: e.target.value }) }} value={this.state.registrationCode} type="text" className="form-control" placeholder="Registration Code" required />
+                        </div>
+
                         {/* Register Button */}
                         <Center>
-                            <div>
-                                <button onClick={this.registerUser.bind(this)} type="button" className="btn btn-success btn-lg">Register</button>
+                            <div className="">
+                                <button onClick={e => this.registerUser()} type="button" className="btn btn-success btn-lg">Register</button>
+                            </div>
+
+                        </Center>
+                        <Center>
+                            <div className="">
+                                {
+                                    (this.state.failedRegistration ? <div className="text-center" style={{ padding: "15px", color: 'red' }} >invalid registration code</div> : "")
+                                }
                             </div>
                         </Center>
                         {/* End Register Button  */}

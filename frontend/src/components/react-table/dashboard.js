@@ -7,6 +7,7 @@ import { makeData } from './table-data';
 
 
 import ReactTable from 'react-table';
+import matchSorter from 'match-sorter';
 import 'react-table/react-table.css';
 import { Link } from 'react-router-dom';
 
@@ -41,13 +42,6 @@ class Dashboard extends Component {
         };
     }
 
-    // 1 Day  = new Date().toLocaleString("en-US", options)
-    // 3 Day = endDate = new Date(), startDate = new Date() + 3
-    // 7 Day = endDate = new Date(), startDate = new Date + 7
-    // 1 month
-    // 3 month
-    // 6 month
-    // 1 year
 
     dateToday() {
         const date = new Date().toLocaleDateString("en-US");
@@ -59,17 +53,11 @@ class Dashboard extends Component {
         const startDate = new Date();
         startDate.setDate(date.getDate() - daysBack);
         return startDate.toLocaleDateString("en-US");
-        // this.setState(
-        //     {
-        //         chartData: {
-        //             ...this.state.chartData,
-        //             startDate: startDate.toLocaleDateString("en-US")
-        //         }
-        //     })
+
     }
 
     getChartData() {
-        axios.post("http://localhost:3000/data/byday", {
+        axios.post("https://agile-shelf-11349.herokuapp.com/data/byday", {
             startDate: this.setStartDate(370),
             endDate: this.dateToday()
         }).then(res => {
@@ -92,7 +80,7 @@ class Dashboard extends Component {
 
     getTimeFrame = lengthOfDays => {
         // grabs one week of keys in an array format
-        
+
         let allKeys = Object.keys(this.state.chartData.data);
         let rangeKeys = allKeys.slice(allKeys.length - lengthOfDays, allKeys.length);
 
@@ -112,7 +100,7 @@ class Dashboard extends Component {
     // Gives token before receiving data from data-api
     getData() {
         var token = localStorage.bearer;
-        axios.get("http://localhost:3000/data/", {
+        axios.get("https://agile-shelf-11349.herokuapp.com/data/", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
@@ -127,13 +115,14 @@ class Dashboard extends Component {
     // Checks token before rendering page
     componentDidMount() {
         var token = localStorage.bearer;
-        axios.get("http://localhost:3000/users/tokencheck", {
+        axios.get("https://agile-shelf-11349.herokuapp.com/users/tokencheck", {
             'headers': {
                 'authorization': 'Bearer ' + token
             }
         }).then(res => {
             if (res.data.success === true) {
                 console.log('token success: ' + res.data.success);
+                
             }
             else {
                 console.log('token success: ' + res.data.success);
@@ -167,91 +156,137 @@ class Dashboard extends Component {
                             this.componentDidMount();
                         }} >Log Out</button>
                 </div >
-                {/* Chartjs */}
-                < div className="container button-row" >
-                    <button 
-                        className="btn btn-default" 
-                        onClick={e => this.getTimeFrame(3)}
+                <div className="container click-chart col-sm-10 col-sm-offset-1" style={{ border: "1px solid black", padding: '20px' }} >
+                    {/* Chartjs */}
+                    < div className="container button-row" >
+                        <button
+                            className="btn btn-default"
+                            onClick={e => this.getTimeFrame(3)}
                         >Last 3 Days</button>
-                    <button 
-                        className="btn btn-default" 
-                        onClick={e => this.getTimeFrame(7)}
+                        <button
+                            className="btn btn-default"
+                            onClick={e => this.getTimeFrame(7)}
                         >Last Week</button>
-                    <button 
-                        className="btn btn-default" 
-                        onClick={e => this.getTimeFrame(30)}
+                        <button
+                            className="btn btn-default"
+                            onClick={e => this.getTimeFrame(30)}
                         >Month</button>
-                    <button 
-                        className="btn btn-default" 
-                        onClick={e => this.getTimeFrame(365)}
+                        <button
+                            className="btn btn-default"
+                            onClick={e => this.getTimeFrame(365)}
                         >Year</button>
-                </div >
-                <Bar
-                    data={{
-                        labels: this.state.renderData.time,
-                        datasets: [
-                            {
-                                label: 'Fraud Index per Day',
-                                backgroundColor: 'rgba(255,99,132,0.2)',
-                                borderColor: 'rgba(255,99,132,1)',
-                                borderWidth: 1,
-                                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                                hoverBorderColor: 'rgba(255,99,132,1)',
-                                data: this.state.renderData.fraudIndex
-                            }
-                        ],
-
-                    }}
-                    options={{
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    suggestedMin: 0,
-                                    suggestedMax: 100
+                    </div >
+                    <Bar
+                        data={{
+                            labels: this.state.renderData.time,
+                            datasets: [
+                                {
+                                    label: 'Fraud Index per Day',
+                                    backgroundColor: 'rgba(255,99,132,0.2)',
+                                    borderColor: 'rgba(255,99,132,1)',
+                                    borderWidth: 1,
+                                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                                    hoverBorderColor: 'rgba(255,99,132,1)',
+                                    data: this.state.renderData.fraudIndex
                                 }
-                            }]
-                        }
-                    }}
+                            ],
 
-                />
-                {/* <FakeDataChart /> */}
+                        }}
+                        options={{
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        suggestedMin: 0,
+                                        suggestedMax: 100
+                                    }
+                                }]
+                            }
+                        }}
+
+                    />
+                </div>
+
                 {/* React Table */}
-                <ReactTable
-                    data={this.state.data}
-                    columns={[
-                        {
-                            Header: "Fraud",
-                            accessor: "fraud"
-                        },
-                        {
-                            Header: "TimeStamp",
-                            accessor: "timeStamp"
-                        },
-                        {
-                            Header: "Campaign",
-                            accessor: "campaign"
-                        },
-                        {
-                            Header: "Affiliate",
-                            accessor: "affiliate"
-                        },
-                        {
-                            Header: "User Agent",
-                            accessor: "userAgent"
-                        },
-                        {
-                            Header: "Location",
-                            accessor: "location"
-                        },
-                        {
-                            Header: "IP Address",
-                            accessor: "ipAddress"
-                        }
+                <div className="container row col-sm-12" style={{ padding: '20px' }}>
+                    <ReactTable
+                        data={this.state.data}
+                        filterable
+                        defaultFilterMethod={(filter, row) =>
+                            String(row[filter.id]) === filter.value}
+                        columns={[
+                            {
+                                Header: "Fraud Index",
+                                accessor: "fraud",
+                                Cell: ({ value }) => (value >= -0.75 ? "Fraud Risk" : "No Fraud"),
+                                filterMethod: (filter, row) => {
+                                    if (filter.value === "all") {
+                                        return true;
+                                    }
+                                    if (filter.value === "true") {
+                                        return row[filter.id] >= -0.75;
+                                    }
+                                    return row[filter.id] < -0.75;
+                                },
+                                Filter: ({ filter, onChange }) =>
+                                    <select
+                                        onChange={event => onChange(event.target.value)}
+                                        style={{ width: "100%" }}
+                                        value={filter ? filter.value : "all"}
+                                    >
+                                        <option value="all">Show All</option>
+                                        <option value="true">Fraud Risk</option>
+                                        <option value="false">No Fraud</option>
+                                    </select>
+                            },
+                            {
+                                Header: "TimeStamp",
+                                accessor: "timeStamp",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["timeStamp"] }),
+                                filterAll: true
+                            },
+                            {
+                                Header: "Campaign",
+                                accessor: "campaign",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["campaign"] }),
+                                filterAll: true
+                            },
+                            {
+                                Header: "Affiliate",
+                                accessor: "affiliate",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["affiliate"] }),
+                                filterAll: true
+                            },
+                            {
+                                Header: "User Agent",
+                                accessor: "userAgent",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["userAgent"] }),
+                                filterAll: true
+                            },
+                            {
+                                Header: "Location",
+                                accessor: "location",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["location"] }),
+                                filterAll: true
+                            },
+                            {
+                                Header: "IP Address",
+                                accessor: "ipAddress",
+                                filterMethod: (filter, rows) =>
+                                    matchSorter(rows, filter.value, { keys: ["ipAddress"] }),
+                                filterAll: true
+                            }
 
-                    ]}
-                    defaultPageSize={50}
-                    className="-striped -highlight"
-                />
+                        ]}
+                        defaultPageSize={50}
+                        className="-striped -highlight"
+                    />
+                </div>
+
             </div >
         )
     }
